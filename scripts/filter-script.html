@@ -1,0 +1,45 @@
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const sections = document.querySelectorAll('main > div[id]');
+        const sidebarLinks = document.querySelectorAll('aside a');
+        const pageTitle = document.querySelector('header h1');
+        const originalTitle = pageTitle ? pageTitle.innerText : 'Collection';
+
+        function handleHashChange() {
+            const hash = window.location.hash.substring(1); // Remove '#'
+            if (hash) {
+                let found = false;
+                let activeName = '';
+                sections.forEach(section => {
+                    if (section.id === hash) {
+                        section.classList.remove('hidden');
+                        found = true;
+                        // Try to find the title inside the section
+                        const sectionTitle = section.querySelector('h2');
+                        if (sectionTitle) activeName = sectionTitle.innerText;
+                    } else {
+                        section.classList.add('hidden');
+                    }
+                });
+
+                if (found) {
+                    window.scrollTo(0, 0);
+                    if (pageTitle && activeName) {
+                        pageTitle.innerText = activeName;
+                    }
+                }
+            } else {
+                // Show all if no hash
+                sections.forEach(section => section.classList.remove('hidden'));
+                if (pageTitle) pageTitle.innerText = originalTitle;
+            }
+        }
+
+        // Initial check
+        handleHashChange();
+
+        // Listen for hash changes
+        window.addEventListener('hashchange', handleHashChange);
+    });
+</script>
+
